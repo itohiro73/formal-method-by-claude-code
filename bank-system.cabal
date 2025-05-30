@@ -1,0 +1,66 @@
+cabal-version: 3.0
+name:          bank-system
+version:       0.1.0.0
+synopsis:      Distributed Bank Account System with Formal Methods
+description:   A sample application demonstrating formal methods and functional programming
+               with a distributed bank account system using Haskell, Liquid Haskell,
+               QuickCheck, and Software Transactional Memory.
+license:       MIT
+author:        Claude Code Demo
+maintainer:    demo@example.com
+category:      Finance
+build-type:    Simple
+
+common warnings
+    ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates
+                 -Wincomplete-uni-patterns -Wmissing-export-lists
+                 -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+
+library
+    import:           warnings
+    exposed-modules:  BankSystem.Core.Account
+                    , BankSystem.Core.Transaction
+                    , BankSystem.Core.Invariants
+                    , BankSystem.Verification.Properties
+                    , BankSystem.Concurrent.STM
+                    , BankSystem.Distributed.Node
+                    , BankSystem.Distributed.Consensus
+    build-depends:    base ^>=4.17.0.0
+                    , stm
+                    , containers
+                    , time
+                    , QuickCheck
+                    , liquidhaskell
+                    , bytestring
+                    , binary
+                    , network
+                    , async
+                    , random
+    hs-source-dirs:   src
+    default-language: Haskell2010
+
+executable bank-demo
+    import:           warnings
+    main-is:          Main.hs
+    build-depends:    base ^>=4.17.0.0
+                    , bank-system
+                    , stm
+                    , async
+                    , random
+    hs-source-dirs:   app
+    default-language: Haskell2010
+
+test-suite bank-test
+    import:           warnings
+    default-language: Haskell2010
+    type:             exitcode-stdio-1.0
+    hs-source-dirs:   test
+    main-is:          Spec.hs
+    build-depends:    base ^>=4.17.0.0
+                    , bank-system
+                    , QuickCheck
+                    , hspec
+                    , stm
+    other-modules:    BankSystem.Core.AccountSpec
+                    , BankSystem.Core.TransactionSpec
+                    , BankSystem.Verification.PropertiesSpec
